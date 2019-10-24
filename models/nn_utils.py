@@ -91,7 +91,7 @@ class batch_generator(object):
         self.shuffle = shuffle
         self.sample_num = reviews.shape[0]
         self.batch_num = int(math.ceil(self.sample_num / float(batch_size)))
-        self.idx = [i for i in xrange(self.sample_num)]
+        self.idx = [i for i in range(self.sample_num)]
         self.start_new_epoch()
 
     def get_reviews(self):
@@ -115,7 +115,7 @@ class batch_generator(object):
         self.batch_counter = 0
 
     def no_shuffle(self):
-        self.idx = [i for i in xrange(self.sample_num)]
+        self.idx = [i for i in range(self.sample_num)]
 
     def shuffle_data(self):
         np.random.shuffle(self.idx)

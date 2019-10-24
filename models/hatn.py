@@ -149,7 +149,7 @@ class HATN(object):
 
         preds = []
         batch_generator = nn_utils.batch_generator(reviews=reviews, word_masks=word_masks, sent_masks=sent_masks, batch_size=batch_size, shuffle=False)
-        for i in xrange(batch_generator.batch_num):
+        for i in range(batch_generator.batch_num):
             xb, wmb, smb = batch_generator.next_batch()
             pred = self.predict_sen(sess, xb, wmb, smb)
             preds += list(pred)
@@ -164,7 +164,7 @@ class HATN(object):
         dom_labels = []
         src_batch_generator = nn_utils.batch_generator(reviews=src_reviews, labels=src_labels, batch_size=batch_size, shuffle=False)
         tar_batch_generator = nn_utils.batch_generator(reviews=tar_reviews, labels=tar_labels, batch_size=batch_size, shuffle=False)
-        for i in xrange(steps):
+        for i in range(steps):
             xb_s, yb_s = src_batch_generator.next_batch()
             xb_t, yb_t = tar_batch_generator.next_batch()
             xb_d       = np.vstack((xb_s, xb_t))
@@ -182,7 +182,7 @@ class HATN(object):
         u_preds = []
         v_preds = []
         batch_generator = nn_utils.batch_generator(reviews=reviews, word_masks=word_masks, sent_masks=sent_masks, batch_size=batch_size, shuffle=False)
-        for i in xrange(batch_generator.batch_num):
+        for i in range(batch_generator.batch_num):
             xb, wmb, smb = batch_generator.next_batch()
             u_pred, v_pred = self.predict_pivots(sess, xb, wmb, smb)
             u_preds += list(u_pred)
@@ -198,7 +198,7 @@ class HATN(object):
         p_w_atttns,  p_s_attns  = [], []
         np_w_atttns, np_s_attns = [], []
         batch_generator = nn_utils.batch_generator(reviews=reviews, word_masks=word_masks, sent_masks=sent_masks, batch_size=batch_size, shuffle=False)
-        for i in xrange(batch_generator.batch_num):
+        for i in range(batch_generator.batch_num):
             xb, wmb, smb   = batch_generator.next_batch()
             w1, s1, w2, s2 = self.get_attention(sess, xb, wmb, smb)
             p_w_atttns += list(w1)

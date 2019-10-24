@@ -74,7 +74,7 @@ def visualization(reviews, y_label, y_pred, word_attentions, sentence_attentions
 
     with open(fname, "w") as f:
 
-        for i in xrange(len(reviews)):
+        for i in range(len(reviews)):
 
             review = reviews[i]
             f.write("review#%d:  GT:%d  Prediction:%d\n" % (i+1, 1 - y_label[i], 1 - y_pred[i]))
@@ -96,11 +96,11 @@ def visualization(reviews, y_label, y_pred, word_attentions, sentence_attentions
                 if (1 - y_label[i] == 0) and (y_label[i] == y_pred[i]):
                     neg_pivots[word] = neg_pivots.get(word, 0) + 1
 
-            for j in xrange(sentence_mask[i]):
+            for j in range(sentence_mask[i]):
                 sentence = review[j]
                 f.write("sen#%d %f: " % (j+1, sentence_attentions[i][j]))
 
-                for k in xrange(word_mask[i][j]):
+                for k in range(word_mask[i][j]):
                     word = idx2word[sentence[k]]
                     f.write("%s %f " % (word, word_attentions[i][j][k]))
 
@@ -127,16 +127,22 @@ def visualization(reviews, y_label, y_pred, word_attentions, sentence_attentions
     stopWord_short = ["'m", "'s", "'re", "'ve", "e", "d"]
     adverse_list = ['not', 'no', 'without', 'never', 'n\'t', 'don\'t', 'hardly']
 
+    new_pos_pivots = {}
+    new_neg_pivots = {}
     for pivot, fre in pos_pivots.items():
         if fre < 5 or pivot in stopWords or pivot in adverse_list or pivot in stopWord_short:
-            del pos_pivots[pivot]
-
+#             del pos_pivots[pivot]
+            continue
+        else:
+            new_pos_pivots[pivot] = fre
     for pivot, fre in neg_pivots.items():
         if fre < 5 or pivot in stopWords or pivot in adverse_list or pivot in stopWord_short:
-            del neg_pivots[pivot]
+            continue
+        else:
+            new_neg_pivots[pivot] = fre
 
-    pos_pivots = sorted(pos_pivots.items(), lambda x, y: cmp(x[1], y[1]), reverse=True)
-    neg_pivots = sorted(neg_pivots.items(), lambda x, y: cmp(x[1], y[1]), reverse=True)
+    pos_pivots = sorted(new_pos_pivots.items(), key=lambda x: x[1], reverse=True)
+    neg_pivots = sorted(new_neg_pivots.items(), key=lambda x: x[1], reverse=True)
 
     return pos_pivots, neg_pivots
 

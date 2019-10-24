@@ -118,7 +118,7 @@ class PNet(object):
 
         preds = []
         batch_generator = nn_utils.batch_generator(reviews=reviews, batch_size=batch_size, shuffle=False)
-        for i in xrange(batch_generator.batch_num):
+        for i in range(batch_generator.batch_num):
             xb = batch_generator.next_batch()
             pred = self.predict_sen(sess, xb)
             preds += list(pred)
@@ -133,7 +133,7 @@ class PNet(object):
         dom_labels = []
         src_batch_generator = nn_utils.batch_generator(reviews=src_reviews, labels=src_labels, batch_size=batch_size, shuffle=False)
         tar_batch_generator = nn_utils.batch_generator(reviews=tar_reviews, labels=tar_labels, batch_size=batch_size, shuffle=False)
-        for i in xrange(steps):
+        for i in range(steps):
             xb_s, yb_s = src_batch_generator.next_batch()
             xb_t, yb_t = tar_batch_generator.next_batch()
             xb_d       = np.vstack((xb_s, xb_t))
@@ -150,7 +150,7 @@ class PNet(object):
 
         p_w_atttns,  p_s_attns  = [], []
         batch_generator = nn_utils.batch_generator(reviews, batch_size=batch_size, shuffle=False)
-        for i in xrange(batch_generator.batch_num):
+        for i in range(batch_generator.batch_num):
             xb  = batch_generator.next_batch()
             w1, s1 = self.get_attention(sess, xb)
             p_w_atttns += list(w1)

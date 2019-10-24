@@ -11,11 +11,11 @@ def get_all_pivots(source_domain, target_domain):
 
     fname = "./work/pivots/%s_%s_pos.txt" % (source_domain, target_domain)
     pos_pivot = get_pivot_list(fname)
-    print pos_pivot
+    print(pos_pivot)
 
     fname = "./work/pivots/%s_%s_neg.txt" % (source_domain, target_domain)
     neg_pivot = get_pivot_list(fname)
-    print neg_pivot
+    print(neg_pivot)
 
     return pos_pivot, neg_pivot
 
@@ -122,7 +122,7 @@ def visualization(reviews, y_label, y_pred, u_labels, v_labels, word_attentions1
 
     with open(fname, "w") as f:
 
-        for i in xrange(len(reviews)):
+        for i in range(len(reviews)):
 
             review = reviews[i]
 
@@ -134,7 +134,7 @@ def visualization(reviews, y_label, y_pred, u_labels, v_labels, word_attentions1
                 word = idx2word[most_important_word]
                 f.write("most important word:%s sen:%d word:%d\n" % (word, sen_idx+1, word_idx+1))
 
-            for j in xrange(len(sentence_mask[i])):
+            for j in range(len(sentence_mask[i])):
                 if j <19 and sentence_mask[i][j] == 0 and sentence_mask[i][j+1] == 0:
                     break
                 if j == 19 and sentence_mask[i][j] == 0:
@@ -143,7 +143,7 @@ def visualization(reviews, y_label, y_pred, u_labels, v_labels, word_attentions1
                 sentence = review[j]
                 f.write("sen#%d %f: " % (j+1, sentence_attentions1[i][j]))
 
-                for k in xrange(len(word_mask[i][j])):
+                for k in range(len(word_mask[i][j])):
 
                     w_idx = sentence[k]
 
@@ -167,7 +167,7 @@ def visualization(reviews, y_label, y_pred, u_labels, v_labels, word_attentions1
                 word = idx2word[most_important_word]
                 f.write("most important word:%s sen:%d word:%d\n" % (word, sen_idx+1, word_idx+1))
 
-            for j in xrange(len(sentence_mask[i])):
+            for j in range(len(sentence_mask[i])):
                 if j <19 and sentence_mask[i][j] == 0 and sentence_mask[i][j+1] == 0:
                     break
                 if j == 19 and sentence_mask[i][j] == 0:
@@ -176,7 +176,7 @@ def visualization(reviews, y_label, y_pred, u_labels, v_labels, word_attentions1
                 sentence = review[j]
                 f.write("sen#%d %f: " % (j+1, sentence_attentions2[i][j]))
 
-                for k in xrange(len(word_mask[i][j])):
+                for k in range(len(word_mask[i][j])):
 
                     w_idx = sentence[k]
 

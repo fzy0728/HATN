@@ -5,13 +5,14 @@ from config import *
 import numpy as np
 from numpy import *
 import argparse
-import matplotlib
-matplotlib.use('Agg')
+# import matplotlib
+# matplotlib.use('Agg')
 import sys
 sys.path.insert(0, 'models')
 
 from data_utils_hatn import *
 from models import HATN
+os.environ['CUDA_VISIBLE_DEVICES'] = '6'
 np.random.seed(FLAGS.random_seed)
 
 if __name__ == "__main__":
@@ -43,7 +44,7 @@ if __name__ == "__main__":
 
     max_story_size  = max(map(len, (pairs[0] for pairs in data)))
     mean_story_size = int(np.mean([len(pairs[0]) for pairs in data]))
-    sentences = map(len, (sentence for pairs in data for sentence in pairs[0]))
+    sentences = list(map(len, (sentence for pairs in data for sentence in pairs[0])))
     max_sentence_size = max(sentences)
     mean_sentence_size = int(mean(sentences))
     memory_size = min(FLAGS.memory_size, max_story_size)
@@ -110,7 +111,7 @@ if __name__ == "__main__":
             steps = int(math.floor(1.0 * n_train / FLAGS.batch_size))
             # num_steps = steps_per_epoch * FLAGS.max_epoch
 
-            for epoch in xrange(1, FLAGS.max_epoch + 1):
+            for epoch in range(1, FLAGS.max_epoch + 1):
 
                 p = float(epoch - 1) / FLAGS.max_epoch
                 lr    = max(0.005 / (1. + 10 * p) ** 0.75, 0.002)
@@ -123,7 +124,7 @@ if __name__ == "__main__":
                 dom_loss = 0.0
                 sen_aux_loss = 0.0
                 unlabel_aux_loss = 0.0
-                for step in xrange(steps):
+                for step in range(steps):
 
                     _, _, sen_cost, dom_cost, sen_aux_cost, unlabel_aux_cost = sess.run([model.train_joint_op, model.train_aux_op,
                                                                                          model.sen_loss, model.dom_loss, model.lab_aux_loss, model.unlab_aux_loss],

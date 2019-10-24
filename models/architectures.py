@@ -52,7 +52,7 @@ class HAN(object):
                 W_w = tf.get_variable(shape=[self.embed_size, self.hidden_size], name='W_w', dtype=tf.float32)
                 b_w = tf.get_variable(shape=[self.hidden_size], name='b_w', dtype=tf.float32)
                 query = self.word_query
-                for i in xrange(self.hops):
+                for i in range(self.hops):
                     sent_reps, query, word_attentions = self.attention_layer(word_reps,
                                                                              query, word_mask,
                                                                              W_w, b_w, scope=sc)
@@ -68,7 +68,7 @@ class HAN(object):
                 W_c = tf.get_variable(shape=[self.hidden_size, self.hidden_size], name='W_c', dtype=tf.float32)
                 b_c = tf.get_variable(shape=[self.hidden_size], name='b_c', dtype=tf.float32)
                 query = self.sent_query
-                for i in xrange(self.hops):
+                for i in range(self.hops):
                     doc_reps, query, sentence_attentions = self.attention_layer(sent_reps,
                                                                                 query, sent_mask,
                                                                                 W_c, b_c, scope=sc)

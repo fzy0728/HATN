@@ -1,8 +1,8 @@
 # coding:utf-8
 from __future__ import print_function
 
-import matplotlib
-matplotlib.use('Agg')
+# import matplotlib
+# matplotlib.use('Agg')
 from sklearn import metrics
 import argparse
 import sys
@@ -11,26 +11,29 @@ sys.path.insert(0, 'models')
 from config import *
 from data_utils_pivots import *
 from models import PNet
+
+os.environ['CUDA_VISIBLE_DEVICES'] = '6'
 np.random.seed(FLAGS.random_seed)
 
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--train', action='store_true')
+parser.add_argument('--test', action='store_true')
+parser.add_argument('--source_domain', '-s', type=str,
+                    choices=['books', 'dvd', 'electronics', 'kitchen', 'video'],
+                    default='electronics')
+parser.add_argument('--target_domain', '-t', type=str,
+                    choices=['books', 'dvd', 'electronics', 'kitchen', 'video'],
+                    default='kitchen')
+parser.add_argument('--verbose', '-v', action='store_true')
+
+args = parser.parse_args()
+
+source_domain = args.source_domain
+target_domain = args.target_domain
+data_path     = FLAGS.data_path
+
 if __name__ == "__main__":
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--train', action='store_true')
-    parser.add_argument('--test', action='store_true')
-    parser.add_argument('--source_domain', '-s', type=str,
-                        choices=['books', 'dvd', 'electronics', 'kitchen', 'video'],
-                        default='electronics')
-    parser.add_argument('--target_domain', '-t', type=str,
-                        choices=['books', 'dvd', 'electronics', 'kitchen', 'video'],
-                        default='kitchen')
-    parser.add_argument('--verbose', '-v', action='store_true')
-    args = parser.parse_args()
-
-    source_domain = args.source_domain
-    target_domain = args.target_domain
-    data_path     = FLAGS.data_path
-
     print("loading data...")
     train_data, val_data, test_data, source_unlabeled_data, target_unlabeled_data, vocab = load_data(source_domain, target_domain, data_path)
 
@@ -40,7 +43,8 @@ if __name__ == "__main__":
 
     max_story_size  = max(map(len, (pairs[0] for pairs in data)))
     mean_story_size = int(np.mean([len(pairs[0]) for pairs in data]))
-    sentences = map(len, (sentence for pairs in data for sentence in pairs[0]))
+    sentences = list(map(len, (sentence for pairs in data for sentence in
+        pairs[0])))
     max_sentence_size = max(sentences)
     mean_sentence_size = int(mean(sentences))
     memory_size = min(FLAGS.memory_size, max_story_size)
@@ -53,6 +57,7 @@ if __name__ == "__main__":
 
     word_embedding, word2idx, idx2word = get_w2vec(vocab, FLAGS)
     vocab_size = len(word_embedding)
+    print('word_embedding done: ', vocab_size)
 
     x_train,  _,    y_train, word_len_train, sentence_len_train = vectorize_data(train_data,  word2idx, memory_size, max_sentence_size)
     x_val,    _,    y_val,   word_len_val,   sentence_len_val   = vectorize_data(val_data,    word2idx, memory_size, max_sentence_size)
@@ -102,18 +107,18 @@ if __name__ == "__main__":
             steps = int(math.floor(1.0 * n_train / FLAGS.batch_size))
             # num_steps = steps_per_epoch * FLAGS.max_epoch
 
-            for epoch in xrange(1, FLAGS.max_epoch + 1):
+            for epoch in range(1, FLAGS.max_epoch + 1):
 
                 p = float(epoch - 1) / FLAGS.max_epoch
                 lr    = max(0.005 / (1. + 10 * p) ** 0.75, 0.002)
                 adapt = min(2. / (1. + np.exp(-10. * p)) - 1, 0.1)
-                if args.verbose:
-                    print('adapt',adapt,'lr',lr)
+#                 if args.verbose:
+                print('adapt',adapt,'lr',lr)
 
                 loss = 0.0
                 sen_loss = 0.0
                 dom_loss = 0.0
-                for step in xrange(steps):
+                for step in range(steps):
 
                     _, sen_cost, dom_cost = sess.run([model.train_op, model.sen_loss, model.dom_loss],feed_dict={model.lr:lr, model.adapt:adapt})
 
@@ -130,10 +135,10 @@ if __name__ == "__main__":
                     train_acc, _ = model.eval_sen(sess, x_train, y_train, batch_size=FLAGS.batch_size)
                     dom_acc      = model.eval_dom(sess, x_s, x_t, d_s, d_t, steps, batch_size=FLAGS.batch_size)
 
-                    if args.verbose:
-                        print("Epoch: [%-3d] loss: %4.8f, sen-loss: %4.8f, dom-loss: %4.8f, train-acc: %.8f, val-acc: %.8f val_loss: %.8f, dom-acc: %.8f"
-                              % (epoch, loss, sen_loss, dom_loss, train_acc, val_acc, val_loss, dom_acc))
-                        print("---------------------------------------------------\n")
+#                     if args.verbose:
+                    print("Epoch: [%-3d] loss: %4.8f, sen-loss: %4.8f, dom-loss: %4.8f, train-acc: %.8f, val-acc: %.8f val_loss: %.8f, dom-acc: %.8f"
+                          % (epoch, loss, sen_loss, dom_loss, train_acc, val_acc, val_loss, dom_acc))
+                    print("---------------------------------------------------\n")
 
                 if best_val_loss > val_loss:
                     best_val_loss = val_loss

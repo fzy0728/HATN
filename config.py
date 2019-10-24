@@ -23,7 +23,11 @@ tf.flags.DEFINE_integer("hops", 1, "Number of hops for the word/sentence attenti
 
 # ************** source configuration **************
 tf.flags.DEFINE_string("data_path", "./data/", "Data path")
-tf.flags.DEFINE_string("w2v_path", "/qydata/zlict/deep-learning/CNN_sentence/GoogleNews-vectors-negative300.bin", "Pre-trained word vectors path")
+tf.flags.DEFINE_string("w2v_path", "./GoogleNews-vectors-negative300.bin", "Pre-trained word vectors path")
 
+tf.flags.DEFINE_string("train", "train", "train")
+tf.flags.DEFINE_string("s", "s", "s")
+tf.flags.DEFINE_bool("verbose", True, "verbose")
+tf.flags.DEFINE_string("t", "t", "t")
 FLAGS = tf.flags.FLAGS
 

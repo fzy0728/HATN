@@ -18,3 +18,4 @@ video-books          0.8748
 video-dvd            0.8760 
 video-electronics    0.8585 
 video-kitchen        0.8602 
+dvd-electronics      0.8635 
