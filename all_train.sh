@@ -1,6 +1,11 @@
-#!/bin/sh
 
-domains=('books' 'dvd' 'electronics' 'kitchen' 'video')
+
+domains[0]="books"
+domains[1]="dvd"
+domains[2]="electronics"
+domains[3]="kitchen"
+domains[4]="video"
+
 for src_domain in ${domains[@]};
 do
 	for tar_domain in  ${domains[@]};
